@@ -1,0 +1,31 @@
+{
+    "runonstartup": "false",
+    "frequency": "60000",
+    "disksetting":
+    {
+        "C": "true",
+        "D": "true",
+        "E": "true",
+        "F": "true",
+        "G": "false",
+        "H": "false",
+        "I": "true",
+        "J": "true",
+        "K": "true",
+        "L": "true",
+        "M": "false",
+        "N": "false",
+        "O": "true",
+        "P": "true",
+        "Q": "true",
+        "R": "true",
+        "S": "false",
+        "T": "false",
+        "U": "true",
+        "V": "true",
+        "W": "true",
+        "X": "true",
+        "Y": "false",
+        "Z": "false"
+    }
+}
