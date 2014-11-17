@@ -11,6 +11,7 @@
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
+#include <boost/foreach.hpp>
 #include <string>
 #include <fstream>
 #include <exception>
@@ -24,6 +25,8 @@ using namespace boost::property_tree;
 #endif
 
 #define WM_SHOWTASK (WM_USER+100)
+#define ID_TIMER 1
+#define STATUS_CHECKED 1
 
 
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
@@ -80,7 +83,6 @@ BEGIN_MESSAGE_MAP(CwakeupdiskDlg, CDialogEx)
     ON_MESSAGE(WM_SHOWTASK, &CwakeupdiskDlg::OnShowtask)
     ON_BN_CLICKED(IDCANCEL, &CwakeupdiskDlg::OnBnClickedCancel)
     ON_WM_CLOSE()
-    ON_BN_CLICKED(IDC_CHECKC, &CwakeupdiskDlg::OnBnClickedCheckc)
     ON_WM_TIMER()
 END_MESSAGE_MAP()
 
@@ -117,10 +119,9 @@ BOOL CwakeupdiskDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO:  在此添加额外的初始化代码
-    m_vecSetting.resize(24);
     ReadJSONFile();
     Reset();
-    SetTimer(1, m_fre, NULL);
+    SetTimer(ID_TIMER, pt.get<int>("frequency"), NULL);
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -144,41 +145,14 @@ void CwakeupdiskDlg::OnSysCommand(UINT nID, LPARAM lParam)
 void CwakeupdiskDlg::ReadJSONFile()
 {
     try{
-        read_json("\\init.json", pt);
-        m_runonstartup = pt.get<bool>("runonstartup");
-        m_fre = pt.get<int>("frequency");
-        Ptreetovec();
+        read_json("init.json", pt);
     }
     catch (exception& e){
-        string error = e.what();
-        CString cstr;
-        
-        MessageBox(TEXT("init.json丢失或损坏!"));
-        
+        MessageBox(TEXT("init.json丢失或损坏!"));      
         CDialogEx::OnCancel();
-
     }
 }
 
-void CwakeupdiskDlg::VectoPtree()
-{
-    for (int i = 0; i < m_vecSetting.size(); ++i)
-    {
-        string strQuery = "C";
-        strQuery[0] += i;
-        pt.put("disksetting."+strQuery, m_vecSetting[i] == 1 ? true : false);
-    }
-}
-
-void CwakeupdiskDlg::Ptreetovec()
-{
-    for (int i = 0; i < m_vecSetting.size(); ++i)
-    {
-        string strQuery = "C";
-        strQuery[0] += i;
-        m_vecSetting[i] = static_cast<int>(pt.get<bool>("disksetting." + strQuery));
-    }
-}
 
 void CwakeupdiskDlg::OnPaint()
 {
@@ -213,71 +187,40 @@ HCURSOR CwakeupdiskDlg::OnQueryDragIcon()
 }
 
 
-
 void CwakeupdiskDlg::OnBnClickedOk()
 {
     // TODO:  在此添加控件通知处理程序代码
     //CDialogEx::OnOK();
     //获取item
     //不能删除指针
-    CButton* pButton0 = (CButton*)GetDlgItem(IDC_CHECKC);
-    CButton* pButton1 = (CButton*)GetDlgItem(IDC_CHECKD);
-    CButton* pButton2 = (CButton*)GetDlgItem(IDC_CHECKE);
-    CButton* pButton3 = (CButton*)GetDlgItem(IDC_CHECKF);
-    CButton* pButton4 = (CButton*)GetDlgItem(IDC_CHECKG);
-    CButton* pButton5 = (CButton*)GetDlgItem(IDC_CHECKH);
-    CButton* pButton6 = (CButton*)GetDlgItem(IDC_CHECKI);
-    CButton* pButton7 = (CButton*)GetDlgItem(IDC_CHECKJ);
-    CButton* pButton8 = (CButton*)GetDlgItem(IDC_CHECKK);
-    CButton* pButton9 = (CButton*)GetDlgItem(IDC_CHECKL);
-    CButton* pButton10 = (CButton*)GetDlgItem(IDC_CHECKM);
-    CButton* pButton11 = (CButton*)GetDlgItem(IDC_CHECKN);
-    CButton* pButton12 = (CButton*)GetDlgItem(IDC_CHECKO);
-    CButton* pButton13 = (CButton*)GetDlgItem(IDC_CHECKP);
-    CButton* pButton14 = (CButton*)GetDlgItem(IDC_CHECKQ);
-    CButton* pButton15 = (CButton*)GetDlgItem(IDC_CHECKR);
-    CButton* pButton16 = (CButton*)GetDlgItem(IDC_CHECKS);
-    CButton* pButton17 = (CButton*)GetDlgItem(IDC_CHECKT);
-    CButton* pButton18 = (CButton*)GetDlgItem(IDC_CHECKU);
-    CButton* pButton19 = (CButton*)GetDlgItem(IDC_CHECKV);
-    CButton* pButton20 = (CButton*)GetDlgItem(IDC_CHECKW);
-    CButton* pButton21 = (CButton*)GetDlgItem(IDC_CHECKX);
-    CButton* pButton22 = (CButton*)GetDlgItem(IDC_CHECKY);
-    CButton* pButton23 = (CButton*)GetDlgItem(IDC_CHECKZ);
-    m_vecSetting[0] = pButton0->GetCheck();
-    m_vecSetting[1] = pButton1->GetCheck();
-    m_vecSetting[2] = pButton2->GetCheck();
-    m_vecSetting[3] = pButton3->GetCheck();
-    m_vecSetting[4] = pButton4->GetCheck();
-    m_vecSetting[5] = pButton5->GetCheck();
-    m_vecSetting[6] = pButton6->GetCheck();
-    m_vecSetting[7] = pButton7->GetCheck();
-    m_vecSetting[8] = pButton8->GetCheck();
-    m_vecSetting[9] = pButton9->GetCheck();
-    m_vecSetting[10] = pButton10->GetCheck();
-    m_vecSetting[11] = pButton11->GetCheck();
-    m_vecSetting[12] = pButton12->GetCheck();
-    m_vecSetting[13] = pButton13->GetCheck();
-    m_vecSetting[14] = pButton14->GetCheck();
-    m_vecSetting[15] = pButton15->GetCheck();
-    m_vecSetting[16] = pButton16->GetCheck();
-    m_vecSetting[17] = pButton17->GetCheck();
-    m_vecSetting[18] = pButton18->GetCheck();
-    m_vecSetting[19] = pButton19->GetCheck();
-    m_vecSetting[20] = pButton20->GetCheck();
-    m_vecSetting[21] = pButton21->GetCheck();
-    m_vecSetting[22] = pButton22->GetCheck();
-    m_vecSetting[23] = pButton23->GetCheck();
+    static vector<decltype(IDC_CHECKC)> ctrl_macro_vec = {
+        IDC_CHECKC,IDC_CHECKD,IDC_CHECKE,IDC_CHECKF,
+        IDC_CHECKG,IDC_CHECKH,IDC_CHECKI,IDC_CHECKJ,
+        IDC_CHECKK,IDC_CHECKL,IDC_CHECKN,IDC_CHECKM,
+        IDC_CHECKO,IDC_CHECKP,IDC_CHECKQ,IDC_CHECKR,
+        IDC_CHECKS,IDC_CHECKT,IDC_CHECKU,IDC_CHECKV,
+        IDC_CHECKW,IDC_CHECKX,IDC_CHECKY,IDC_CHECKZ };
+    const static int vec_size = static_cast<int>(ctrl_macro_vec.size());
+    for (int i = 0; i < vec_size; ++i)
+    {
+        CButton* pButton = (CButton*)GetDlgItem(ctrl_macro_vec[i]);
+        string drive = "C";
+        drive[0] += i;
+        pt.put("disksetting." + drive, 
+            pButton->GetCheck() == STATUS_CHECKED ? true : false);
+    }
 
     CButton* pButton = (CButton*)GetDlgItem(IDC_START);
-    m_runonstartup = pButton->GetCheck();
-    pt.put("runonstartup", m_runonstartup == 1 ? true : false);
-    m_fre = GetDlgItemInt(IDC_EDIT_FRE);
-    pt.put("frequency", m_fre);
-    KillTimer(1);
-    SetTimer(1, m_fre, NULL);
-    VectoPtree();
+    pt.put("runonstartup", 
+        pButton->GetCheck() == STATUS_CHECKED ? true : false);
+
+    pt.put("frequency", GetDlgItemInt(IDC_EDIT_FRE));
+    //reset the timer
+    KillTimer(ID_TIMER);
+    SetTimer(ID_TIMER, pt.get<int>("frequency"), NULL);
+
     //SetRunOnStartUp(m_runonstartup);
+    OnTimer(ID_TIMER);
     ToTray();
 }
 
@@ -351,7 +294,6 @@ void CwakeupdiskDlg::ToTray()
    
 }
 
-
 afx_msg LRESULT CwakeupdiskDlg::OnShowtask(WPARAM wParam, LPARAM lParam)
 {
     if (lParam == WM_LBUTTONDOWN)
@@ -365,59 +307,26 @@ afx_msg LRESULT CwakeupdiskDlg::OnShowtask(WPARAM wParam, LPARAM lParam)
 void CwakeupdiskDlg::Reset()
 {
     //reset disksetting
-    CButton* pButton0 = (CButton*)GetDlgItem(IDC_CHECKC);
-    CButton* pButton1 = (CButton*)GetDlgItem(IDC_CHECKD);
-    CButton* pButton2 = (CButton*)GetDlgItem(IDC_CHECKE);
-    CButton* pButton3 = (CButton*)GetDlgItem(IDC_CHECKF);
-    CButton* pButton4 = (CButton*)GetDlgItem(IDC_CHECKG);
-    CButton* pButton5 = (CButton*)GetDlgItem(IDC_CHECKH);
-    CButton* pButton6 = (CButton*)GetDlgItem(IDC_CHECKI);
-    CButton* pButton7 = (CButton*)GetDlgItem(IDC_CHECKJ);
-    CButton* pButton8 = (CButton*)GetDlgItem(IDC_CHECKK);
-    CButton* pButton9 = (CButton*)GetDlgItem(IDC_CHECKL);
-    CButton* pButton10 = (CButton*)GetDlgItem(IDC_CHECKM);
-    CButton* pButton11 = (CButton*)GetDlgItem(IDC_CHECKN);
-    CButton* pButton12 = (CButton*)GetDlgItem(IDC_CHECKO);
-    CButton* pButton13 = (CButton*)GetDlgItem(IDC_CHECKP);
-    CButton* pButton14 = (CButton*)GetDlgItem(IDC_CHECKQ);
-    CButton* pButton15 = (CButton*)GetDlgItem(IDC_CHECKR);
-    CButton* pButton16 = (CButton*)GetDlgItem(IDC_CHECKS);
-    CButton* pButton17 = (CButton*)GetDlgItem(IDC_CHECKT);
-    CButton* pButton18 = (CButton*)GetDlgItem(IDC_CHECKU);
-    CButton* pButton19 = (CButton*)GetDlgItem(IDC_CHECKV);
-    CButton* pButton20 = (CButton*)GetDlgItem(IDC_CHECKW);
-    CButton* pButton21 = (CButton*)GetDlgItem(IDC_CHECKX);
-    CButton* pButton22 = (CButton*)GetDlgItem(IDC_CHECKY);
-    CButton* pButton23 = (CButton*)GetDlgItem(IDC_CHECKZ);
-    pButton0->SetCheck(m_vecSetting[0]);
-    pButton1->SetCheck(m_vecSetting[1]);
-    pButton2->SetCheck(m_vecSetting[2]);
-    pButton3->SetCheck(m_vecSetting[3]);
-    pButton4->SetCheck(m_vecSetting[4]);
-    pButton5->SetCheck(m_vecSetting[5]);
-    pButton6->SetCheck(m_vecSetting[6]);
-    pButton7->SetCheck(m_vecSetting[7]);
-    pButton8->SetCheck(m_vecSetting[8]);
-    pButton9->SetCheck(m_vecSetting[9]);
-    pButton10->SetCheck(m_vecSetting[10]);
-    pButton11->SetCheck(m_vecSetting[11]);
-    pButton12->SetCheck(m_vecSetting[12]);
-    pButton13->SetCheck(m_vecSetting[13]);
-    pButton14->SetCheck(m_vecSetting[14]);
-    pButton15->SetCheck(m_vecSetting[15]);
-    pButton16->SetCheck(m_vecSetting[16]);
-    pButton17->SetCheck(m_vecSetting[17]);
-    pButton18->SetCheck(m_vecSetting[18]);
-    pButton19->SetCheck(m_vecSetting[19]);
-    pButton20->SetCheck(m_vecSetting[20]);
-    pButton21->SetCheck(m_vecSetting[21]);
-    pButton22->SetCheck(m_vecSetting[22]);
-    pButton23->SetCheck(m_vecSetting[23]);
+    static vector<decltype(IDC_CHECKC)> ctrl_macro_vec = {
+        IDC_CHECKC, IDC_CHECKD, IDC_CHECKE, IDC_CHECKF,
+        IDC_CHECKG, IDC_CHECKH, IDC_CHECKI, IDC_CHECKJ,
+        IDC_CHECKK, IDC_CHECKL, IDC_CHECKN, IDC_CHECKM,
+        IDC_CHECKO, IDC_CHECKP, IDC_CHECKQ, IDC_CHECKR,
+        IDC_CHECKS, IDC_CHECKT, IDC_CHECKU, IDC_CHECKV,
+        IDC_CHECKW, IDC_CHECKX, IDC_CHECKY, IDC_CHECKZ };
+    const static int vec_size = static_cast<int>(ctrl_macro_vec.size());
+    for (int i = 0; i < vec_size; ++i)
+    {
+        CButton* pButton = (CButton*)GetDlgItem(ctrl_macro_vec[i]);
+        string drive = "C";
+        drive[0] += i;
+        pButton->SetCheck(pt.get<bool>("disksetting." + drive) ? STATUS_CHECKED : 0);
+    }
     //reset runonstartup
     CButton* pButton = (CButton*)GetDlgItem(IDC_START);
-    pButton->SetCheck(m_runonstartup);
+    pButton->SetCheck(pt.get<bool>("runonstartup") ? STATUS_CHECKED : 0);
     //reset frequency
-    SetDlgItemInt(IDC_EDIT_FRE, m_fre);
+    SetDlgItemInt(IDC_EDIT_FRE, pt.get<int>("frequency"));
 }
 
 void CwakeupdiskDlg::OnBnClickedCancel()
@@ -437,22 +346,25 @@ void CwakeupdiskDlg::OnClose()
         TEXT("确定关闭"),
         MB_OKCANCEL) == 1)
     {
-        write_json("\\init.json", pt);
+        try{
+            write_json("init.json", pt);
+        }
+        catch (exception& e)
+        {
+            MessageBox(TEXT("????"));
+        }
+       
         CDialogEx::OnCancel();
         CDialogEx::OnClose();
     }
     
 }
 
-void CwakeupdiskDlg::OnBnClickedCheckc()
-{
-}
-
 
 void CwakeupdiskDlg::OnTimer(UINT_PTR nIDEvent)
 {
     // TODO:  在此添加消息处理程序代码和/或调用默认值
-    for (int i = 0; i < m_vecSetting.size(); ++i)
+    /*for (int i = 0; i < m_vecSetting.size(); ++i)
     {
         
         if (m_vecSetting[i] == 1)
@@ -462,6 +374,16 @@ void CwakeupdiskDlg::OnTimer(UINT_PTR nIDEvent)
             drive += "wkd.log";
             std::ofstream fs(drive.c_str());
             fs << "hehe" << std::endl;
+            fs.close();
+        }
+    }*/
+    BOOST_FOREACH(auto& x, pt.get_child("disksetting"))
+    {
+        if (x.second.data()=="true")
+        {
+            string drive = x.first + ":\\wkd.log";
+            std::ofstream fs(drive.c_str());
+            fs << "0" << std::endl;
             fs.close();
         }
     }

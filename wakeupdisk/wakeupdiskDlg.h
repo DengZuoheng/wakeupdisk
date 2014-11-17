@@ -41,18 +41,12 @@ protected:
 public:
     afx_msg void OnBnClickedCancel();
     afx_msg void OnClose();
-    afx_msg void OnBnClickedCheckc();
-public:
-    vector<int> m_vecSetting;
+public:   
     ptree pt;
-    int m_fre;
-    int m_runonstartup;
-
+ 
 private:
     void Reset();
     void ReadJSONFile();
-    void VectoPtree();
-    void Ptreetovec();
     void SetRunOnStartUp(bool);
 
 public:

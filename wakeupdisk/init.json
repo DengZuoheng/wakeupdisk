@@ -8,24 +8,24 @@
         "E": "true",
         "F": "true",
         "G": "false",
-        "H": "false",
+        "H": "true",
         "I": "true",
         "J": "true",
         "K": "true",
         "L": "true",
-        "M": "false",
+        "M": "true",
         "N": "false",
         "O": "true",
         "P": "true",
         "Q": "true",
         "R": "true",
         "S": "false",
-        "T": "false",
+        "T": "true",
         "U": "true",
         "V": "true",
         "W": "true",
         "X": "true",
         "Y": "false",
-        "Z": "false"
+        "Z": "true"
     }
 }
