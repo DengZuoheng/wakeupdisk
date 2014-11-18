@@ -1,5 +1,5 @@
 {
-    "runonstartup": "false",
+    "runonstartup": "true",
     "frequency": "60000",
     "disksetting":
     {

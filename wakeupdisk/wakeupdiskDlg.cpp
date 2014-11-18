@@ -1,12 +1,13 @@
 
 // wakeupdiskDlg.cpp : 实现文件
 //
-#pragma comment(lib,"Wtsapi32.lib")
+
 #include "stdafx.h"
 #include "wakeupdisk.h"
 #include "wakeupdiskDlg.h"
 #include "afxdialogex.h"
 #include "Wtsapi32.h"
+#include "CommonMethod.h"
 
 
 #include <boost/property_tree/ptree.hpp>
@@ -45,6 +46,9 @@ public:
 // 实现
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+//    afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+//    afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 };
 
 CAboutDlg::CAboutDlg() : CDialogEx(CAboutDlg::IDD)
@@ -57,6 +61,8 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
+//    ON_WM_CREATE()
+//    ON_WM_SHOWWINDOW()
 END_MESSAGE_MAP()
 
 
@@ -84,6 +90,8 @@ BEGIN_MESSAGE_MAP(CwakeupdiskDlg, CDialogEx)
     ON_BN_CLICKED(IDCANCEL, &CwakeupdiskDlg::OnBnClickedCancel)
     ON_WM_CLOSE()
     ON_WM_TIMER()
+//    ON_WM_CREATE()
+//    ON_WM_SHOWWINDOW()
 END_MESSAGE_MAP()
 
 
@@ -149,7 +157,7 @@ void CwakeupdiskDlg::ReadJSONFile()
     }
     catch (exception& e){
         MessageBox(TEXT("init.json丢失或损坏!"));      
-        CDialogEx::OnCancel();
+        CDialogEx::OnDestroy();
     }
 }
 
@@ -219,62 +227,62 @@ void CwakeupdiskDlg::OnBnClickedOk()
     KillTimer(ID_TIMER);
     SetTimer(ID_TIMER, pt.get<int>("frequency"), NULL);
 
-    //SetRunOnStartUp(m_runonstartup);
+    SetRunOnStartUp(pt.get<bool>("runonstartup"));
     OnTimer(ID_TIMER);
     ToTray();
 }
 
 void CwakeupdiskDlg::SetRunOnStartUp(bool bFlag)
 {
-    /*CString strName;
-    strName = _T("");
-    //for xp or above 
-    TCHAR *szLogName = NULL;
-    DWORD dwSize = 0;
-    if (WTSQuerySessionInformation(WTS_CURRENT_SERVER_HANDLE,
-        WTS_CURRENT_SESSION,
-        WTSUserName,
-        &szLogName,
-        &dwSize))
+    
+    HKEY RegKey=NULL;
+    CString sPath;
+
+    GetModuleFileName(NULL, 
+        sPath.GetBufferSetLength(MAX_PATH + 1),
+        MAX_PATH);
+
+    sPath.ReleaseBuffer();
+    int nPos;
+    nPos = sPath.ReverseFind('\\');
+    sPath = sPath.Left(nPos);
+    CString lpszFile = sPath + "\\wakeupdisk.exe";//这里加上你要查找的执行文件名称   
+    CFileFind fFind;
+    BOOL bSuccess;
+    bSuccess = fFind.FindFile(lpszFile);
+    fFind.Close();
+
+    if (bSuccess)
     {
-        strName = szLogName;
-        WTSFreeMemory(szLogName);
-    }
-    HKEY hKey;
-    //找到系统的启动项   
-    CString lpRun = CString(_T("C:\\Users\\"))
-        +strName
-        +CString(_T("\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup"));
-    //打开启动项Key   
-    long lRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE, lpRun, 0, KEY_WRITE, &hKey);
-    if (lRet == ERROR_SUCCESS)
-    {
-        TCHAR pFileName[MAX_PATH] = { 0 };
-        //得到程序自身的全路径   
-        DWORD dwRet = GetModuleFileName(NULL, pFileName, MAX_PATH);
-        //添加一个子Key,并设置值 // 下面的"test"是应用程序名字（不加后缀.exe）  
-        if (bFlag == true)
+        CString fullName(lpszFile);
+
+        RegOpenKey(HKEY_LOCAL_MACHINE, 
+            TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Run"), 
+            &RegKey);
+
+        if (bFlag)
         {
-            lRet = RegSetValueEx(hKey, _T("wakeupdisk"), 0, REG_SZ, (BYTE *)pFileName, dwRet);
+            RegSetValueEx(RegKey, 
+                TEXT("wakeupdisk"), 
+                0, 
+                REG_SZ, 
+                (BYTE*)(LPCTSTR)fullName, 
+                fullName.GetLength() * 2);//这里加上你需要在注册表中注册的内容   
         }
         else
         {
-            lRet = RegDeleteValue(hKey, _T("wakeupdisk"));
+            RegDeleteValue(RegKey, TEXT("wakeupdisk"));
         }
         
-        //关闭注册表   
-        RegCloseKey(hKey);
-        if (lRet != ERROR_SUCCESS)
-        {
-            AfxMessageBox(_T("系统参数错误,不能完成开机启动设置"));
-        }
-        else
-        {
-            AfxMessageBox(_T("设置启动成功"));
-        }
+        this->UpdateData(FALSE);
     }
     else
-        AfxMessageBox(_T("系统参数错误,不能完成开机启动设置"));*/
+    {
+        //theApp.SetMainSkin();   
+        MessageBox(TEXT("没找到执行程序，自动运行失败"));
+        exit(0);
+    }
+
 }
 
 void CwakeupdiskDlg::ToTray()
@@ -287,7 +295,7 @@ void CwakeupdiskDlg::ToTray()
     nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
     nid.uCallbackMessage = WM_SHOWTASK;//自定义的消息名称
     nid.hIcon = LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_MAINFRAME));
-    //strcpy(nid.szTip, TEXT("计划任务提醒"));//信息提示条为“计划任务提醒”
+    
     wsprintf(nid.szTip, TEXT("%s"), TEXT("托盘测试"));
     Shell_NotifyIcon(NIM_ADD, &nid);//在托盘区添加图标
     ShowWindow(SW_HIDE);//隐藏主窗口
@@ -364,19 +372,7 @@ void CwakeupdiskDlg::OnClose()
 void CwakeupdiskDlg::OnTimer(UINT_PTR nIDEvent)
 {
     // TODO:  在此添加消息处理程序代码和/或调用默认值
-    /*for (int i = 0; i < m_vecSetting.size(); ++i)
-    {
-        
-        if (m_vecSetting[i] == 1)
-        {
-            string drive = "C:\\";
-            drive[0] += i;
-            drive += "wkd.log";
-            std::ofstream fs(drive.c_str());
-            fs << "hehe" << std::endl;
-            fs.close();
-        }
-    }*/
+   
     BOOST_FOREACH(auto& x, pt.get_child("disksetting"))
     {
         if (x.second.data()=="true")
@@ -389,3 +385,4 @@ void CwakeupdiskDlg::OnTimer(UINT_PTR nIDEvent)
     }
     CDialogEx::OnTimer(nIDEvent);
 }
+
