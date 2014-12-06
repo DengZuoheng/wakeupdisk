@@ -16,6 +16,7 @@
 #include <string>
 #include <fstream>
 #include <exception>
+#include <cstring>
 using std::string;
 using std::vector;
 using std::exception;
@@ -153,7 +154,8 @@ void CwakeupdiskDlg::OnSysCommand(UINT nID, LPARAM lParam)
 void CwakeupdiskDlg::ReadJSONFile()
 {
     try{
-        read_json("init.json", pt);
+        string jsonpath = GetModuleProfileName("init.json");
+        read_json(jsonpath, pt);
     }
     catch (exception& e){
         MessageBox(TEXT("init.json¶ªÊ§»òËð»µ!"));      
@@ -355,11 +357,12 @@ void CwakeupdiskDlg::OnClose()
         MB_OKCANCEL) == 1)
     {
         try{
-            write_json("init.json", pt);
+            string jsonpath = GetModuleProfileName("init.json");
+            write_json(jsonpath, pt);
         }
         catch (exception& e)
         {
-            MessageBox(TEXT("????"));
+            MessageBox(TEXT("init.json¶ªÊ§»òËð»µ!"));
         }
        
         CDialogEx::OnCancel();

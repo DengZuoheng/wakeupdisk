@@ -2,6 +2,7 @@
 #include "CommonMethod.h"
 #include "stdafx.h"
 #include "Wtsapi32.h"
+#include <string>
 #pragma comment(lib,"Wtsapi32.lib")
 
 BOOL GetLogUser(CString& str_name)
@@ -23,4 +24,13 @@ BOOL GetLogUser(CString& str_name)
     }
 
     return bRet;
+}
+
+std::string GetModuleProfileName(std::string basic_file_name)
+{
+    char FilePath[MAX_PATH];
+    ::GetModuleFileNameA(NULL, FilePath, MAX_PATH);
+    (strrchr(FilePath, '\\'))[1] = 0;
+    std::string retpath(FilePath);
+    return retpath + basic_file_name;
 }
