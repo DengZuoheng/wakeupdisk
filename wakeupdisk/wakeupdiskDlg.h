@@ -43,6 +43,9 @@ public:
     afx_msg void OnClose();
 public:   
     ptree pt;
+private:
+    bool flg_lost_json;
+    WINDOWPLACEMENT m_wp;
  
 private:
     void Reset();

@@ -28,6 +28,7 @@ using namespace boost::property_tree;
 
 #define WM_SHOWTASK (WM_USER+100)
 #define ID_TIMER 1
+#define ID_TIMER_TRAY 2
 #define STATUS_CHECKED 1
 
 
@@ -131,6 +132,19 @@ BOOL CwakeupdiskDlg::OnInitDialog()
     ReadJSONFile();
     Reset();
     SetTimer(ID_TIMER, pt.get<int>("frequency"), NULL);
+    
+    GetWindowPlacement(&m_wp); //恢复时用
+    ModifyStyleEx(WS_EX_APPWINDOW, WS_EX_TOOLWINDOW);//从任务栏中去掉.
+
+
+    WINDOWPLACEMENT wp;
+    wp.length = sizeof(WINDOWPLACEMENT);
+    wp.flags = WPF_RESTORETOMAXIMIZED;
+    wp.showCmd = SW_HIDE;
+    SetWindowPlacement(&wp);
+
+    ToTray();
+
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -156,10 +170,12 @@ void CwakeupdiskDlg::ReadJSONFile()
     try{
         string jsonpath = GetModuleProfileName("init.json");
         read_json(jsonpath, pt);
+        flg_lost_json = false;
     }
     catch (exception& e){
-        MessageBox(TEXT("init.json丢失或损坏!"));      
-        CDialogEx::OnDestroy();
+        MessageBox(TEXT("init.json丢失或损坏!"));  
+        flg_lost_json = true;
+        exit(0);
     }
 }
 
@@ -308,6 +324,13 @@ afx_msg LRESULT CwakeupdiskDlg::OnShowtask(WPARAM wParam, LPARAM lParam)
 {
     if (lParam == WM_LBUTTONDOWN)
     {
+        static bool flg_lbd = 0;
+        if (flg_lbd == 0)
+        {
+            SetWindowPlacement(&m_wp);
+            flg_lbd++;
+        }
+        
         ShowWindow(SW_SHOW);//隐藏主窗口
     }
     return 0;
@@ -350,6 +373,7 @@ void CwakeupdiskDlg::OnBnClickedCancel()
 void CwakeupdiskDlg::OnClose()
 {
     // TODO:  在此添加消息处理程序代码和/或调用默认值
+   
     if (::MessageBox(
         this->m_hWnd,
         TEXT("关闭程序可能导致硬盘休眠,确定关闭?"),
@@ -368,6 +392,7 @@ void CwakeupdiskDlg::OnClose()
         CDialogEx::OnCancel();
         CDialogEx::OnClose();
     }
+    
     
 }
 
