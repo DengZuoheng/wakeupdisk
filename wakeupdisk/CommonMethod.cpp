@@ -1,4 +1,4 @@
-
+﻿
 #include "CommonMethod.h"
 #include "stdafx.h"
 #include "Wtsapi32.h"

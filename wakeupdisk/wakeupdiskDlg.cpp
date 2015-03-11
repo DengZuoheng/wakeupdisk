@@ -1,5 +1,5 @@
-
-// wakeupdiskDlg.cpp : ÊµÏÖÎÄ¼ş
+ï»¿
+// wakeupdiskDlg.cpp : å®ç°æ–‡ä»¶
 //
 
 #include "stdafx.h"
@@ -32,20 +32,20 @@ using namespace boost::property_tree;
 #define STATUS_CHECKED 1
 
 
-// ÓÃÓÚÓ¦ÓÃ³ÌĞò¡°¹ØÓÚ¡±²Ëµ¥ÏîµÄ CAboutDlg ¶Ô»°¿ò
+// ç”¨äºåº”ç”¨ç¨‹åºâ€œå…³äºâ€èœå•é¡¹çš„ CAboutDlg å¯¹è¯æ¡†
 
 class CAboutDlg : public CDialogEx
 {
 public:
 	CAboutDlg();
 
-// ¶Ô»°¿òÊı¾İ
+// å¯¹è¯æ¡†æ•°æ®
 	enum { IDD = IDD_ABOUTBOX };
 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV æ”¯æŒ
 
-// ÊµÏÖ
+// å®ç°
 protected:
 	DECLARE_MESSAGE_MAP()
 public:
@@ -68,7 +68,7 @@ BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CwakeupdiskDlg ¶Ô»°¿ò
+// CwakeupdiskDlg å¯¹è¯æ¡†
 
 
 
@@ -97,15 +97,15 @@ BEGIN_MESSAGE_MAP(CwakeupdiskDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CwakeupdiskDlg ÏûÏ¢´¦Àí³ÌĞò
+// CwakeupdiskDlg æ¶ˆæ¯å¤„ç†ç¨‹åº
 
 BOOL CwakeupdiskDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	// ½«¡°¹ØÓÚ...¡±²Ëµ¥ÏîÌí¼Óµ½ÏµÍ³²Ëµ¥ÖĞ¡£
+	// å°†â€œå…³äº...â€èœå•é¡¹æ·»åŠ åˆ°ç³»ç»Ÿèœå•ä¸­ã€‚
 
-	// IDM_ABOUTBOX ±ØĞëÔÚÏµÍ³ÃüÁî·¶Î§ÄÚ¡£
+	// IDM_ABOUTBOX å¿…é¡»åœ¨ç³»ç»Ÿå‘½ä»¤èŒƒå›´å†…ã€‚
 	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
 	ASSERT(IDM_ABOUTBOX < 0xF000);
 
@@ -123,18 +123,18 @@ BOOL CwakeupdiskDlg::OnInitDialog()
 		}
 	}
 
-	// ÉèÖÃ´Ë¶Ô»°¿òµÄÍ¼±ê¡£  µ±Ó¦ÓÃ³ÌĞòÖ÷´°¿Ú²»ÊÇ¶Ô»°¿òÊ±£¬¿ò¼Ü½«×Ô¶¯
-	//  Ö´ĞĞ´Ë²Ù×÷
-	SetIcon(m_hIcon, TRUE);			// ÉèÖÃ´óÍ¼±ê
-	SetIcon(m_hIcon, FALSE);		// ÉèÖÃĞ¡Í¼±ê
+	// è®¾ç½®æ­¤å¯¹è¯æ¡†çš„å›¾æ ‡ã€‚  å½“åº”ç”¨ç¨‹åºä¸»çª—å£ä¸æ˜¯å¯¹è¯æ¡†æ—¶ï¼Œæ¡†æ¶å°†è‡ªåŠ¨
+	//  æ‰§è¡Œæ­¤æ“ä½œ
+	SetIcon(m_hIcon, TRUE);			// è®¾ç½®å¤§å›¾æ ‡
+	SetIcon(m_hIcon, FALSE);		// è®¾ç½®å°å›¾æ ‡
 
-	// TODO:  ÔÚ´ËÌí¼Ó¶îÍâµÄ³õÊ¼»¯´úÂë
+	// TODO:  åœ¨æ­¤æ·»åŠ é¢å¤–çš„åˆå§‹åŒ–ä»£ç 
     ReadJSONFile();
     Reset();
     SetTimer(ID_TIMER, pt.get<int>("frequency"), NULL);
     
-    GetWindowPlacement(&m_wp); //»Ö¸´Ê±ÓÃ
-    ModifyStyleEx(WS_EX_APPWINDOW, WS_EX_TOOLWINDOW);//´ÓÈÎÎñÀ¸ÖĞÈ¥µô.
+    GetWindowPlacement(&m_wp); //æ¢å¤æ—¶ç”¨
+    ModifyStyleEx(WS_EX_APPWINDOW, WS_EX_TOOLWINDOW);//ä»ä»»åŠ¡æ ä¸­å»æ‰.
 
 
     WINDOWPLACEMENT wp;
@@ -145,7 +145,7 @@ BOOL CwakeupdiskDlg::OnInitDialog()
 
     ToTray();
 
-	return TRUE;  // ³ı·Ç½«½¹µãÉèÖÃµ½¿Ø¼ş£¬·ñÔò·µ»Ø TRUE
+	return TRUE;  // é™¤éå°†ç„¦ç‚¹è®¾ç½®åˆ°æ§ä»¶ï¼Œå¦åˆ™è¿”å› TRUE
 }
 
 void CwakeupdiskDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -161,9 +161,9 @@ void CwakeupdiskDlg::OnSysCommand(UINT nID, LPARAM lParam)
 	}
 }
 
-// Èç¹ûÏò¶Ô»°¿òÌí¼Ó×îĞ¡»¯°´Å¥£¬ÔòĞèÒªÏÂÃæµÄ´úÂë
-//  À´»æÖÆ¸ÃÍ¼±ê¡£  ¶ÔÓÚÊ¹ÓÃÎÄµµ/ÊÓÍ¼Ä£ĞÍµÄ MFC Ó¦ÓÃ³ÌĞò£¬
-//  Õâ½«ÓÉ¿ò¼Ü×Ô¶¯Íê³É¡£
+// å¦‚æœå‘å¯¹è¯æ¡†æ·»åŠ æœ€å°åŒ–æŒ‰é’®ï¼Œåˆ™éœ€è¦ä¸‹é¢çš„ä»£ç 
+//  æ¥ç»˜åˆ¶è¯¥å›¾æ ‡ã€‚  å¯¹äºä½¿ç”¨æ–‡æ¡£/è§†å›¾æ¨¡å‹çš„ MFC åº”ç”¨ç¨‹åºï¼Œ
+//  è¿™å°†ç”±æ¡†æ¶è‡ªåŠ¨å®Œæˆã€‚
 
 void CwakeupdiskDlg::ReadJSONFile()
 {
@@ -173,7 +173,7 @@ void CwakeupdiskDlg::ReadJSONFile()
         flg_lost_json = false;
     }
     catch (exception& e){
-        MessageBox(TEXT("init.json¶ªÊ§»òËğ»µ!"));  
+        MessageBox(TEXT("init.jsonä¸¢å¤±æˆ–æŸå!"));  
         flg_lost_json = true;
         exit(0);
     }
@@ -184,11 +184,11 @@ void CwakeupdiskDlg::OnPaint()
 {
 	if (IsIconic())
 	{
-		CPaintDC dc(this); // ÓÃÓÚ»æÖÆµÄÉè±¸ÉÏÏÂÎÄ
+		CPaintDC dc(this); // ç”¨äºç»˜åˆ¶çš„è®¾å¤‡ä¸Šä¸‹æ–‡
 
 		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
 
-		// Ê¹Í¼±êÔÚ¹¤×÷Çø¾ØĞÎÖĞ¾ÓÖĞ
+		// ä½¿å›¾æ ‡åœ¨å·¥ä½œåŒºçŸ©å½¢ä¸­å±…ä¸­
 		int cxIcon = GetSystemMetrics(SM_CXICON);
 		int cyIcon = GetSystemMetrics(SM_CYICON);
 		CRect rect;
@@ -196,7 +196,7 @@ void CwakeupdiskDlg::OnPaint()
 		int x = (rect.Width() - cxIcon + 1) / 2;
 		int y = (rect.Height() - cyIcon + 1) / 2;
 
-		// »æÖÆÍ¼±ê
+		// ç»˜åˆ¶å›¾æ ‡
 		dc.DrawIcon(x, y, m_hIcon);
 	}
 	else
@@ -205,8 +205,8 @@ void CwakeupdiskDlg::OnPaint()
 	}
 }
 
-//µ±ÓÃ»§ÍÏ¶¯×îĞ¡»¯´°¿ÚÊ±ÏµÍ³µ÷ÓÃ´Ëº¯ÊıÈ¡µÃ¹â±ê
-//ÏÔÊ¾¡£
+//å½“ç”¨æˆ·æ‹–åŠ¨æœ€å°åŒ–çª—å£æ—¶ç³»ç»Ÿè°ƒç”¨æ­¤å‡½æ•°å–å¾—å…‰æ ‡
+//æ˜¾ç¤ºã€‚
 HCURSOR CwakeupdiskDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
@@ -215,10 +215,10 @@ HCURSOR CwakeupdiskDlg::OnQueryDragIcon()
 
 void CwakeupdiskDlg::OnBnClickedOk()
 {
-    // TODO:  ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+    // TODO:  åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
     //CDialogEx::OnOK();
-    //»ñÈ¡item
-    //²»ÄÜÉ¾³ıÖ¸Õë
+    //è·å–item
+    //ä¸èƒ½åˆ é™¤æŒ‡é’ˆ
     static vector<decltype(IDC_CHECKC)> ctrl_macro_vec = {
         IDC_CHECKC,IDC_CHECKD,IDC_CHECKE,IDC_CHECKF,
         IDC_CHECKG,IDC_CHECKH,IDC_CHECKI,IDC_CHECKJ,
@@ -264,7 +264,7 @@ void CwakeupdiskDlg::SetRunOnStartUp(bool bFlag)
     int nPos;
     nPos = sPath.ReverseFind('\\');
     sPath = sPath.Left(nPos);
-    CString lpszFile = sPath + "\\wakeupdisk.exe";//ÕâÀï¼ÓÉÏÄãÒª²éÕÒµÄÖ´ĞĞÎÄ¼şÃû³Æ   
+    CString lpszFile = sPath + "\\wakeupdisk.exe";//è¿™é‡ŒåŠ ä¸Šä½ è¦æŸ¥æ‰¾çš„æ‰§è¡Œæ–‡ä»¶åç§°   
     CFileFind fFind;
     BOOL bSuccess;
     bSuccess = fFind.FindFile(lpszFile);
@@ -285,7 +285,7 @@ void CwakeupdiskDlg::SetRunOnStartUp(bool bFlag)
                 0, 
                 REG_SZ, 
                 (BYTE*)(LPCTSTR)fullName, 
-                fullName.GetLength() * 2);//ÕâÀï¼ÓÉÏÄãĞèÒªÔÚ×¢²á±íÖĞ×¢²áµÄÄÚÈİ   
+                fullName.GetLength() * 2);//è¿™é‡ŒåŠ ä¸Šä½ éœ€è¦åœ¨æ³¨å†Œè¡¨ä¸­æ³¨å†Œçš„å†…å®¹   
         }
         else
         {
@@ -297,7 +297,7 @@ void CwakeupdiskDlg::SetRunOnStartUp(bool bFlag)
     else
     {
         //theApp.SetMainSkin();   
-        MessageBox(TEXT("Ã»ÕÒµ½Ö´ĞĞ³ÌĞò£¬×Ô¶¯ÔËĞĞÊ§°Ü"));
+        MessageBox(TEXT("æ²¡æ‰¾åˆ°æ‰§è¡Œç¨‹åºï¼Œè‡ªåŠ¨è¿è¡Œå¤±è´¥"));
         exit(0);
     }
 
@@ -311,12 +311,12 @@ void CwakeupdiskDlg::ToTray()
     nid.hWnd = this->m_hWnd;
     nid.uID = IDR_MAINFRAME;
     nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
-    nid.uCallbackMessage = WM_SHOWTASK;//×Ô¶¨ÒåµÄÏûÏ¢Ãû³Æ
+    nid.uCallbackMessage = WM_SHOWTASK;//è‡ªå®šä¹‰çš„æ¶ˆæ¯åç§°
     nid.hIcon = LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_MAINFRAME));
     
-    wsprintf(nid.szTip, TEXT("%s"), TEXT("ÍĞÅÌ²âÊÔ"));
-    Shell_NotifyIcon(NIM_ADD, &nid);//ÔÚÍĞÅÌÇøÌí¼ÓÍ¼±ê
-    ShowWindow(SW_HIDE);//Òş²ØÖ÷´°¿Ú
+    wsprintf(nid.szTip, TEXT("%s"), TEXT("æ‰˜ç›˜æµ‹è¯•"));
+    Shell_NotifyIcon(NIM_ADD, &nid);//åœ¨æ‰˜ç›˜åŒºæ·»åŠ å›¾æ ‡
+    ShowWindow(SW_HIDE);//éšè—ä¸»çª—å£
    
 }
 
@@ -331,7 +331,7 @@ afx_msg LRESULT CwakeupdiskDlg::OnShowtask(WPARAM wParam, LPARAM lParam)
             flg_lbd++;
         }
         
-        ShowWindow(SW_SHOW);//Òş²ØÖ÷´°¿Ú
+        ShowWindow(SW_SHOW);//éšè—ä¸»çª—å£
     }
     return 0;
 }
@@ -364,7 +364,7 @@ void CwakeupdiskDlg::Reset()
 
 void CwakeupdiskDlg::OnBnClickedCancel()
 {
-    // TODO:  ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+    // TODO:  åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
     ToTray();
     Reset();
     //CDialogEx::OnCancel();
@@ -372,12 +372,12 @@ void CwakeupdiskDlg::OnBnClickedCancel()
 
 void CwakeupdiskDlg::OnClose()
 {
-    // TODO:  ÔÚ´ËÌí¼ÓÏûÏ¢´¦Àí³ÌĞò´úÂëºÍ/»òµ÷ÓÃÄ¬ÈÏÖµ
+    // TODO:  åœ¨æ­¤æ·»åŠ æ¶ˆæ¯å¤„ç†ç¨‹åºä»£ç å’Œ/æˆ–è°ƒç”¨é»˜è®¤å€¼
    
     if (::MessageBox(
         this->m_hWnd,
-        TEXT("¹Ø±Õ³ÌĞò¿ÉÄÜµ¼ÖÂÓ²ÅÌĞİÃß,È·¶¨¹Ø±Õ?"),
-        TEXT("È·¶¨¹Ø±Õ"),
+        TEXT("å…³é—­ç¨‹åºå¯èƒ½å¯¼è‡´ç¡¬ç›˜ä¼‘çœ ,ç¡®å®šå…³é—­?"),
+        TEXT("ç¡®å®šå…³é—­"),
         MB_OKCANCEL) == 1)
     {
         try{
@@ -386,7 +386,7 @@ void CwakeupdiskDlg::OnClose()
         }
         catch (exception& e)
         {
-            MessageBox(TEXT("init.json¶ªÊ§»òËğ»µ!"));
+            MessageBox(TEXT("init.jsonä¸¢å¤±æˆ–æŸå!"));
         }
        
         CDialogEx::OnCancel();
@@ -399,7 +399,7 @@ void CwakeupdiskDlg::OnClose()
 
 void CwakeupdiskDlg::OnTimer(UINT_PTR nIDEvent)
 {
-    // TODO:  ÔÚ´ËÌí¼ÓÏûÏ¢´¦Àí³ÌĞò´úÂëºÍ/»òµ÷ÓÃÄ¬ÈÏÖµ
+    // TODO:  åœ¨æ­¤æ·»åŠ æ¶ˆæ¯å¤„ç†ç¨‹åºä»£ç å’Œ/æˆ–è°ƒç”¨é»˜è®¤å€¼
    
     BOOST_FOREACH(auto& x, pt.get_child("disksetting"))
     {

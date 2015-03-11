@@ -1,4 +1,4 @@
-#ifndef COMMONMETHOD_H
+﻿#ifndef COMMONMETHOD_H
 #define COMMONMETHOD_H
 #include <string>
 #include "stdafx.h"
